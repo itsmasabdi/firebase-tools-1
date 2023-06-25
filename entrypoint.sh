@@ -9,7 +9,7 @@ fi
 
 if [ -n "$GCP_SA_KEY" ]; then
   echo "Storing GCP_SA_KEY in /opt/gcp_key.json"
-  echo "$GCP_SA_KEY" | base64 -d > /opt/gcp_key.json
+  echo "$GCP_SA_KEY" > /opt/gcp_key.json
   echo "Exporting GOOGLE_APPLICATION_CREDENTIALS=/opt/gcp_key.json"
   export GOOGLE_APPLICATION_CREDENTIALS=/opt/gcp_key.json
 fi
@@ -25,6 +25,6 @@ fi
 
 # if the args starts with ./ we are running a script
 case "$*" in
-  ./*) sh -c "$*";;
+  ./*) script_name=${*#./}; script_name=${script_name%% *}; echo "$script_name"; chmod +x "$script_name" && sh -c "$*";;
   *) sh -c "firebase $*";;
 esac
